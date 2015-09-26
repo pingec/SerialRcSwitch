@@ -1,4 +1,4 @@
-#include "RCSwitch/RCSwitch.h"
+#include <RCSwitch.h>
 #include "SerialRcSwitch.h"
 
 #define BUFF_SIZE 8
@@ -50,14 +50,17 @@ void processReadData()
 
   int int1 = -1;
   int int2 = -1;
+  Command cmd;
 
   if (startsWith("OFF(", inData))
   {
+    cmd = off;
     int1 = (inData[4] - '0');
-    int2 = (inData[6] - '0');
+    int2 = (inData[6] - '0');    
   }
   else if (startsWith("ON(", inData))
   {
+    cmd = on;
     int1 = (inData[3] - '0');
     int2 = (inData[5] - '0');
   }
@@ -67,14 +70,20 @@ void processReadData()
     return;
   }
 
-  if (int1 >= 1 && int1 <= 4 && int2 >= 1 && int2 <= 4)
-  {
-    Serial.print(inData);
+  if (argumentsValid(int1, int2))
+  {    
+    txCommand(cmd, int1, int2);
+    Serial.print(inData);    
     Serial.println(" OK!");
   }
   else {
     Serial.println("Command parameters out of range.");
   }
+}
+
+bool argumentsValid(int int1, int int2)
+{
+  return int1 >= 1 && int1 <= 4 && int2 >= 1 && int2 <= 4;
 }
 
  
@@ -88,8 +97,7 @@ void txCommand(Command cmd, int int1, int int2)
   else if(cmd == off)
   {
     rcSwitch.switchOff(int1, int2);    
-  }  
-  delay(1000);  
+  }    
   digitalWrite(LED_PIN, LOW);   
 }
 
