@@ -1,5 +1,7 @@
 # SerialRcSwitch
-Allows to trigger rc-switch tx command sending via serial port
+Allows to trigger rc-switch tx command sending via serial port (via Arduino)
+
+![demo](https://github.com/pingec/SerialRcSwitch/blob/master/demo/demo.gif?raw=true)
 
 ##Instructions
 - install RCSwitch as an arduino library (copy the folder to the arduino libraries folder)
